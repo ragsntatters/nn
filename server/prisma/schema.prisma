@@ -1,0 +1,35 @@
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model User {
+  id              String    @id @default(cuid())
+  email           String    @unique
+  password        String
+  firstName       String
+  lastName        String
+  role            Role      @default(user)
+  avatar          String?
+  isEmailVerified Boolean   @default(false)
+  verificationToken String?
+  resetToken      String?
+  resetTokenExpiry DateTime?
+  lastLogin       DateTime?
+  stripeCustomerId String?
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt
+
+  @@map("users")
+}
+
+enum Role {
+  admin
+  editor
+  viewer
+  user
+}
